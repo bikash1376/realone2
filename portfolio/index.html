@@ -1,66 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
-  <link rel="stylesheet" href="style.css" />
-
-  <script src="https://kit.fontawesome.com/e132908da1.js" crossorigin="anonymous"></script>
-  <title>Portfolio</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>News API Demo</title>
+  <style>
+    .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .news-desc {
+        width: 350px;
+    }
+    .title-image {
+        width: 350px;
+        height: 200px;
+    }
+    img {
+        width: 400px;
+        height: 300px;
+    }
+    h2 {
+        font-size: 20px;
+        font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    p {
+        font-size: 15px;
+        font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .readmore {
+        font-size: 15px;
+        color: blue;
+        text-decoration: underline;
+    }
+  </style>
 </head>
-
 <body>
-  <!-- <div class="carousel">
-      <div class="A item">Card 1</div>
-      <div class="B item">Card 2</div>
-      <div class="C item">Card 3</div>
-      <div class="D item">Card 4</div>
-    </div> -->
 
-  <div id="main">
-    <div class="swiper mySwiper">
-      <div class="swiper-wrapper">
-        <div class="swiper-slide">
-          <h3>Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto, reprehenderit aspernatur provident
-            totam ducimus asperiores sint consectetur tempora hic. Magnam, similique.</h3>
-          <h5>Client name</h5>
-          <h6>Org name</h6>
+<button onclick="generateImages()">Generate News</button>
+<h1>News Articles</h1>
+<div id="newsContainer"></div>
+
+<script>
+  function generateImages() {
+    generateNews();
+  }
+
+  function generateNews() {
+    const apiKey = 'd6a762aa477e4fb7aea0d788bcd8170e';
+    
+    fetch(`https://newsapi.org/v2/everything?q=bitcoin&apiKey=${apiKey}`)
+      .then(response => response.json())
+      .then(response => {
+        // Handle the generated news data
+        console.log(response);
+        displayNews(response.articles); // Call a function to display the news
+      })
+      .catch(err => console.error(err));
+  }
+
+  function displayNews(articles) {
+    const newsContainer = document.getElementById('newsContainer');
+    
+    // Clear previous content
+    newsContainer.innerHTML = '';
+
+    // Loop through articles and create elements for each
+    articles.forEach(article => {
+      const articleDiv = document.createElement('div');
+      articleDiv.innerHTML = `
+    
+      <div class= "container">
+      
+        ${article.urlToImage ? `<img src="${article.urlToImage}" alt="${article.title}" class="title-image">` : ''}
+        <div class= "news-desc">
+        <h2 class="title-text">${article.title}</h2>
+        <p class= "description">${article.description}</p>
+        <a href="${article.url}" target="_blank" class="readmore">Read more</a>
+        <div>
+        <hr>
         </div>
+      `;
+      newsContainer.appendChild(articleDiv);
+    });
+  }
+  window.onload(generateNews());
+</script>
 
-        <div class="swiper-slide">
-          <h3>Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto, reprehenderit aspernatur provident
-            totam ducimus asperiores sint consectetur tempora hic. Magnam, similique.</h3>
-          <h5>Client name</h5>
-          <h6>Org name</h6>
-        </div>
-
-        <div class="swiper-slide">
-          <h3>Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto, reprehenderit aspernatur provident
-            totam ducimus asperiores sint consectetur tempora hic. Magnam, similique.</h3>
-          <h5>Client name</h5>
-          <h6>Org name</h6>
-        </div>
-
-        <div class="swiper-slide">
-          <h3>Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto, reprehenderit aspernatur provident
-            totam ducimus asperiores sint consectetur tempora hic. Magnam, similique.</h3>
-          <h5>Client name</h5>
-          <h6>Org name</h6>
-        </div>
-
-        <div class="swiper-slide">
-          <h3>Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto, reprehenderit aspernatur provident
-            totam ducimus asperiores sint consectetur tempora hic. Magnam, similique.</h3>
-          <h5>Client name</h5>
-          <h6>Org name</h6>
-        </div>
-      </div>
-
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
-    <script src="script.js"></script>
 </body>
-
 </html>
